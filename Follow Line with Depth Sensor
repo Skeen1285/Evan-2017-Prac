@@ -1,0 +1,62 @@
+#!/usr/bin/python
+print "Program started"
+import os, sys
+from wallaby import *
+import Constants as c
+
+def depth_sensed():
+    return(analog(c.depth_sensor)>c.depth_mid)
+
+def BlackRight():
+    return(analog(c.right_tophat)>c.right_tophat_bw)
+
+def BlackLeft():
+    return(analog(c.left_tophat)>c.left_tophat_bw)
+
+def main():
+    print "Die Die Die"
+    DeathSensor()
+
+def DeathSensor():
+    print "1"
+    while c.depth_sensor_value<c.depth_mid:     
+        followline()
+        print "3"
+        mav(c.right_motor, 0)
+        mav(c.left_motor, 0)    
+        
+        
+def followline():
+    print "Hello World"
+    while analog(c.left_tophat)<c.left_tophat_bw: #Same as BlackLeft():
+        if  BlackRight():
+            mav(c.right_motor,-1000)
+            print "Right Tophat: %d"%analog(c.right_tophat)
+            print "Left Tophat: %d"%analog(c.left_tophat)
+        else:
+            mav(c.left_motor,1000)
+            print "Right Tophat: %d"%analog(c.right_tophat)
+            print "Left Tophat: %d"%analog(c.left_tophat)
+        msleep(30)
+        mav(c.left_motor,0)
+        mav(c.right_motor,0)
+
+
+def drive(time=1000):
+    mav(left_motor,1500)
+    mav(right_motor,-1500)
+    msleep(time)
+    mav(left_motor,0)
+    mav(right_motor,0)
+    mav(left_motor,1500)
+    mav(right_motor,1500)
+    msleep(right_turn)
+    mav(left_motor,0)
+    mav(right_motor,0)
+
+    #def NAME OF THE FUNCTION():
+    #Code Here
+
+if __name__== "__main__":
+    sys.stdout = os.fdopen(sys.stdout.fileno(),"w",0)
+    main();
